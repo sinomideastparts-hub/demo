@@ -9,931 +9,868 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet">
 
-    <!-- Icons -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        'cn-round': ['Noto Sans SC', 'sans-serif'],
+                        'cn-art': ['ZCOOL XiaoWei', 'serif'],
+                    },
+                    colors: {
+                        stone: '#F2F0E9',
+                        gold: '#D4AF37',
+                        'dark-stone': '#8B8780',
+                    }
+                }
+            }
+        }
+    </script>
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Custom styles for logo transparency and animations */
+        .logo-blend {
+            mix-blend-mode: multiply;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .gallery-item {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Lightbox styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+        
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .lightbox-close,
+        .lightbox-nav {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 1rem;
+            transition: background 0.3s ease;
+        }
+        
+        .lightbox-close:hover,
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .lightbox-close {
+            top: 20px;
+            right: 20px;
+        }
+        
+        .lightbox-nav {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .lightbox-nav.prev {
+            left: 20px;
+        }
+        
+        .lightbox-nav.next {
+            right: 20px;
+        }
+        
+        /* Mobile menu toggle */
+        .mobile-menu-open {
+            max-height: 500px;
+        }
+
+        /* Chinese round font for body text */
+        .text-cn {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        /* Artistic font style for title */
+        .text-art {
+            font-family: 'ZCOOL XiaoWei', serif;
+            letter-spacing: 0.15em;
+            color: #1a1a1a;
+            position: relative;
+        }
+
+        .text-art::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+        }
+
+        /* Artistic font style for partner names */
+        .text-partner {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, #8B7355 0%, #D4AF37 50%, #8B7355 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 1px 2px rgba(139, 115, 85, 0.3));
+        }
+    </style>
 </head>
-<body>
+<body class="bg-stone font-sans text-gray-900 text-cn">
+
     <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">
-                <span class="logo-text">LEOS</span>
-                <span class="logo-accent">Royal</span>
-            </a>
-            <div class="nav-menu" id="nav-menu">
-                <a href="#asset-manager" class="nav-link">资产管理方</a>
-                <a href="#overview" class="nav-link">项目概况</a>
-                <a href="#developer" class="nav-link">开发商</a>
-                <a href="#ai-pillars" class="nav-link">AI智慧</a>
-                <a href="#inventory" class="nav-link">房源</a>
-                <a href="#investment" class="nav-link">投资方案</a>
-                <a href="#gallery" class="nav-link">画廊</a>
-                <a href="#contact" class="nav-link nav-cta">立即咨询</a>
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-stone/95 backdrop-blur-sm border-b border-gold/20 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="#" class="font-serif text-2xl">
+                    <span class="text-gray-900">LEOS</span>
+                    <span class="text-gold"> Royal</span>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#asset-manager" class="text-sm text-gray-700 hover:text-gold transition">资产管理方</a>
+                    <a href="#overview" class="text-sm text-gray-700 hover:text-gold transition">项目概况</a>
+                    <a href="#developer" class="text-sm text-gray-700 hover:text-gold transition">开发商</a>
+                    <a href="#ai-pillars" class="text-sm text-gray-700 hover:text-gold transition">AI智慧</a>
+                    <a href="#inventory" class="text-sm text-gray-700 hover:text-gold transition">房源</a>
+                    <a href="#investment" class="text-sm text-gray-700 hover:text-gold transition">投资方案</a>
+                    <a href="#gallery" class="text-sm text-gray-700 hover:text-gold transition">画廊</a>
+                    <a href="#contact" class="px-6 py-2 bg-gold text-white text-sm font-medium hover:bg-gold/90 transition">立即咨询</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-toggle" class="lg:hidden text-gray-900">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
             </div>
-            <button class="nav-toggle" id="nav-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
+            
+            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="lg:hidden overflow-hidden max-h-0 transition-all duration-300">
+                <div class="py-4 space-y-3 border-t border-gold/20">
+                    <a href="#asset-manager" class="block text-sm text-gray-700 hover:text-gold transition">资产管理方</a>
+                    <a href="#overview" class="block text-sm text-gray-700 hover:text-gold transition">项目概况</a>
+                    <a href="#developer" class="block text-sm text-gray-700 hover:text-gold transition">开发商</a>
+                    <a href="#ai-pillars" class="block text-sm text-gray-700 hover:text-gold transition">AI智慧</a>
+                    <a href="#inventory" class="block text-sm text-gray-700 hover:text-gold transition">房源</a>
+                    <a href="#investment" class="block text-sm text-gray-700 hover:text-gold transition">投资方案</a>
+                    <a href="#gallery" class="block text-sm text-gray-700 hover:text-gold transition">画廊</a>
+                    <a href="#contact" class="block px-6 py-2 bg-gold text-white text-sm font-medium text-center hover:bg-gold/90 transition">立即咨询</a>
+                </div>
+            </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-bg">
-            <img src="assets/IMG_1977.JPG" alt="LEOS Royal Entrance" class="hero-image">
-            <div class="hero-overlay"></div>
+    <section class="relative h-screen flex items-center justify-center mt-20">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="images/LR_Masterplan-night-view-with-skyline.jpg" alt="LEOS Royal Entrance" class="w-full h-full object-cover">
+            <!-- Dark gradient overlay for text readability -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
         </div>
-        <div class="hero-content">
-            <p class="hero-subtitle" data-aos="fade-up">迪拜地产短线套利新机遇</p>
-            <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">
-                <span class="title-line">LEOS Royal</span>
-                <span class="title-accent">全新投资操盘方案</span>
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center text-white px-4 max-w-4xl">
+            <p class="text-sm uppercase tracking-widest mb-4 text-stone">迪拜地产短线套利新机遇</p>
+            <h1 class="font-serif text-5xl md:text-7xl mb-4">
+                <span class="block">LEOS Royal</span>
+                <span class="block text-gold text-3xl md:text-5xl mt-2">精选资产投资配置方案</span>
             </h1>
-            <p class="hero-tagline" data-aos="fade-up" data-aos-delay="200">
-                奢华、绿色与智能科技的完美融合
-            </p>
-            <div class="hero-stats" data-aos="fade-up" data-aos-delay="300">
-                <div class="stat-item">
-                    <span class="stat-value">75%</span>
-                    <span class="stat-label">单轮投资回报</span>
+            <p class="text-lg md:text-xl mb-8 text-stone">奢华、绿色与智能科技的完美融合</p>
+            
+            <!-- Hero Stats -->
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 mb-12">
+                <div>
+                    <div class="text-4xl md:text-5xl font-serif text-gold">75%</div>
+                    <div class="text-sm text-stone mt-1">单轮投资回报</div>
                 </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <span class="stat-value">3-6个月</span>
-                    <span class="stat-label">快速退出周期</span>
+                <div class="hidden md:block w-px h-16 bg-white/30"></div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-serif text-gold">3-6个月</div>
+                    <div class="text-sm text-stone mt-1">快速退出周期</div>
                 </div>
             </div>
-            <a href="#investment" class="hero-scroll">
-                <span>探索投资模型</span>
+            
+            <a href="#investment" class="inline-flex flex-col items-center text-white hover:text-gold transition">
+                <span class="text-sm mb-2">探索投资模型</span>
                 <i class="fas fa-chevron-down"></i>
             </a>
         </div>
     </section>
 
     <!-- Asset Manager Section -->
-    <section class="section asset-manager" id="asset-manager">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">ASSET MANAGER</span>
-                <h2 class="section-title">资产管理方</h2>
+    <section id="asset-manager" class="py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <p class="text-xs uppercase tracking-widest text-dark-stone mb-3">ASSET MANAGER</p>
+                <h2 class="font-serif text-4xl md:text-5xl text-gray-900">资产管理方</h2>
             </div>
 
-            <div class="am-content" data-aos="fade-up">
-                <div class="am-logo-wrapper">
-                    <img src="assets/rwa-logo.png" alt="RWA Assets Middle East" class="am-logo">
+            <!-- Logo and Introduction - Split Layout -->
+            <div class="grid md:grid-cols-2 gap-12 lg:gap-20 items-center mb-20">
+                <div class="flex justify-center">
+                    <!-- Logo with transparent background -->
+                    <img src="images/logo-rwa.png" alt="RWA Assets Middle East" class="max-w-sm w-full">
                 </div>
-                <div class="am-intro">
-                    <h3>RWA中东资产管理有限公司</h3>
-                    <p class="am-subtitle">RWA ASSETS Middle East Investment in Commercial Enterprises & Management L.L.C</p>
-                    <p class="am-desc">
+                <div>
+                    <h3 class="font-serif text-2xl text-gray-900 mb-3">RWA中东资产管理有限公司</h3>
+                    <p class="text-sm text-dark-stone mb-4 italic">RWA ASSETS Middle East Investment in Commercial Enterprises & Management L.L.C</p>
+                    <p class="text-gray-700 leading-relaxed">
                         RWA中东资产管理有限公司是一家立足迪拜、辐射中东的专业资产管理机构。公司深耕迪拜房地产市场，凭借敏锐的市场洞察与丰富的行业资源，专注为投资人甄选优质地产项目，提供从项目筛选、资金配置到退出变现的全流程资产管理服务。
                     </p>
                 </div>
             </div>
 
-            <div class="am-highlights" data-aos="fade-up">
-                <div class="am-card">
-                    <div class="am-card-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <h4>深耕迪拜</h4>
-                    <p>本地化专业团队，深谙市场脉搏与投资节奏</p>
+            <!-- Highlights Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <div class="text-center border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-map-marker-alt text-3xl text-gold mb-4"></i>
+                    <h4 class="font-serif text-xl text-gray-900 mb-2">深耕迪拜</h4>
+                    <p class="text-sm text-gray-700">本地化专业团队，深谙市场脉搏与投资节奏</p>
                 </div>
-                <div class="am-card">
-                    <div class="am-card-icon"><i class="fas fa-handshake"></i></div>
-                    <h4>资源整合</h4>
-                    <p>与多家头部开发商建立战略合作，优先获取稀缺房源</p>
+                <div class="text-center border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-handshake text-3xl text-gold mb-4"></i>
+                    <h4 class="font-serif text-xl text-gray-900 mb-2">资源整合</h4>
+                    <p class="text-sm text-gray-700">与多家头部开发商建立战略合作，优先获取稀缺房源</p>
                 </div>
-                <div class="am-card">
-                    <div class="am-card-icon"><i class="fas fa-chart-line"></i></div>
-                    <h4>专业运营</h4>
-                    <p>全流程资产管理体系，确保资金高效运转与快速回笼</p>
+                <div class="text-center border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-chart-line text-3xl text-gold mb-4"></i>
+                    <h4 class="font-serif text-xl text-gray-900 mb-2">专业运营</h4>
+                    <p class="text-sm text-gray-700">全流程资产管理体系，确保资金高效运转与快速回笼</p>
                 </div>
-                <div class="am-card">
-                    <div class="am-card-icon"><i class="fas fa-network-wired"></i></div>
-                    <h4>渠道优势</h4>
-                    <p>覆盖全迪拜的代理分销网络，加速项目去化</p>
+                <div class="text-center border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-network-wired text-3xl text-gold mb-4"></i>
+                    <h4 class="font-serif text-xl text-gray-900 mb-2">渠道优势</h4>
+                    <p class="text-sm text-gray-700">覆盖全迪拜的代理分销网络，加速项目去化</p>
                 </div>
             </div>
 
-            <div class="am-partners" data-aos="fade-up">
-                <h4>战略合作开发商</h4>
-                <div class="partner-list">
-                    <span class="partner-item">Binghatti</span>
-                    <span class="partner-item">Ellington Properties</span>
-                    <span class="partner-item">Aqua Arc</span>
-                    <span class="partner-item">Aila Homes</span>
-                    <span class="partner-item">C Frond</span>
-                    <span class="partner-item">Frond M Villa</span>
-                    <span class="partner-item more">更多优质项目持续甄选中...</span>
+            <!-- Strategic Partners -->
+            <div class="border-t border-gold/20 pt-12">
+                <h4 class="text-2xl text-center mb-10 text-art">战略合作开发商</h4>
+                <div class="flex flex-wrap justify-center gap-6 text-lg">
+                    <span class="px-6 py-3 border border-gold/30 text-partner hover:border-gold/60 transition">Binghatti</span>
+                    <span class="px-6 py-3 border border-gold/30 text-partner hover:border-gold/60 transition">Ellington Properties</span>
+                    <span class="px-6 py-3 border border-gold/30 text-partner hover:border-gold/60 transition">Aqua Arc</span>
+                    <span class="px-6 py-3 border border-gold/30 text-partner hover:border-gold/60 transition">Aila Homes</span>
+                    <span class="px-6 py-3 border border-gold/30 text-partner hover:border-gold/60 transition">C Frond</span>
+                    <span class="px-6 py-3 border border-gold/30 text-partner hover:border-gold/60 transition">Frond M Villa</span>
+                    <span class="px-6 py-3 text-gold italic">更多优质项目持续甄选中...</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Project Overview -->
-    <section class="section overview" id="overview">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">PROJECT OVERVIEW</span>
-                <h2 class="section-title">项目概况</h2>
-                <p class="section-desc">全球首个AI驱动绿色智慧社区，定义未来生活方式</p>
+    <section id="overview" class="py-20 lg:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <p class="text-xs uppercase tracking-widest text-dark-stone mb-3">PROJECT OVERVIEW</p>
+                <h2 class="font-serif text-4xl md:text-5xl text-gray-900 mb-4">项目概况</h2>
+                <p class="text-gray-700 max-w-2xl mx-auto">全球首个AI驱动绿色智慧社区，定义未来生活方式</p>
             </div>
 
-            <div class="overview-grid">
-                <div class="overview-card featured" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card-icon">
-                        <i class="fas fa-microchip"></i>
-                    </div>
-                    <h3>全球首创</h3>
-                    <p>世界首个AI驱动绿色智慧社区，搭载LEOS Core中央操作系统</p>
+            <!-- Overview Grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-microchip text-4xl text-gold mb-4"></i>
+                    <h3 class="font-serif text-xl text-gray-900 mb-3">全球首创</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed">世界首个AI驱动绿色智慧社区，搭载LEOS Core中央操作系统</p>
                 </div>
-
-                <div class="overview-card" data-aos="fade-up" data-aos-delay="150">
-                    <div class="card-icon">
-                        <i class="fas fa-location-dot"></i>
-                    </div>
-                    <h3>优越区位</h3>
-                    <p>迪拜 Wadi Al Safa 5，距市中心仅16分钟，直连E66主干道</p>
+                
+                <div class="border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-location-dot text-4xl text-gold mb-4"></i>
+                    <h3 class="font-serif text-xl text-gray-900 mb-3">优越区位</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed">迪拜 Wadi Al Safa 5，距市中心仅16分钟，直连E66主干道</p>
                 </div>
-
-                <div class="overview-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card-icon">
-                        <i class="fas fa-file-contract"></i>
-                    </div>
-                    <h3>永久产权</h3>
-                    <p>Freehold永久产权，一期二期预计22个月内交付</p>
+                
+                <div class="border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-file-contract text-4xl text-gold mb-4"></i>
+                    <h3 class="font-serif text-xl text-gray-900 mb-3">永久产权</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed">Freehold永久产权，一期二期预计22个月内交付</p>
                 </div>
-
-                <div class="overview-card" data-aos="fade-up" data-aos-delay="250">
-                    <div class="card-icon">
-                        <i class="fas fa-tree"></i>
-                    </div>
-                    <h3>40%绿化</h3>
-                    <p>16,000+棵树木，植物园与泻湖景观，迪拜罕见生态配置</p>
+                
+                <div class="border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-tree text-4xl text-gold mb-4"></i>
+                    <h3 class="font-serif text-xl text-gray-900 mb-3">40%绿化</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed">16,000+棵树木，植物园与泻湖景观，迪拜罕见生态配置</p>
                 </div>
-
-                <div class="overview-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="card-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3>英式教育</h3>
-                    <p>社区内配套英国国际学校，一站式精英教育</p>
+                
+                <div class="border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-graduation-cap text-4xl text-gold mb-4"></i>
+                    <h3 class="font-serif text-xl text-gray-900 mb-3">英式教育</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed">社区内配套英国国际学校，一站式精英教育</p>
                 </div>
-
-                <div class="overview-card" data-aos="fade-up" data-aos-delay="350">
-                    <div class="card-icon">
-                        <i class="fas fa-pen-ruler"></i>
-                    </div>
-                    <h3>顶级设计</h3>
-                    <p>英国伦敦LUD设计公司打造，迪拜市场独一无二的豪华设计</p>
+                
+                <div class="border border-gold/20 p-8 hover:border-gold/40 transition">
+                    <i class="fas fa-pen-ruler text-4xl text-gold mb-4"></i>
+                    <h3 class="font-serif text-xl text-gray-900 mb-3">顶级设计</h3>
+                    <p class="text-sm text-gray-700 leading-relaxed">英国伦敦LUD设计公司打造，迪拜市场独一无二的豪华设计</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Developer Section -->
-    <section class="section developer" id="developer">
-        <div class="developer-bg">
-            <img src="assets/IMG_1996.JPG" alt="LEOS Royal Community" class="developer-image">
-            <div class="developer-overlay"></div>
+    <section id="developer" class="relative py-20 lg:py-32">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="images/LR_Masterplan-P1-P2-Birdsview.jpg" alt="LEOS Royal Community" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
         </div>
-        <div class="container">
-            <div class="developer-content">
-                <div class="developer-text" data-aos="fade-right">
-                    <span class="section-tag light">DEVELOPER</span>
-                    <h2 class="section-title light">开发商背景</h2>
-                    <p class="developer-intro">
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Left: Developer Info -->
+                <div class="text-white">
+                    <p class="text-xs uppercase tracking-widest text-stone mb-3">DEVELOPER</p>
+                    <h2 class="font-serif text-4xl md:text-5xl mb-6">开发商背景</h2>
+                    <p class="text-stone leading-relaxed mb-8">
                         <strong>LEOS Developments</strong> 是一家总部位于英国的高端房地产开发商，
                         由创始人兼主席 <strong>Rui Liu</strong> 领导，致力于将AI技术、可持续发展与人文关怀相融合。
                     </p>
-                    <div class="developer-highlights">
-                        <div class="highlight-item">
-                            <i class="fas fa-building"></i>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-building text-2xl text-gold mt-1"></i>
                             <div>
-                                <span class="highlight-value">AED 150亿+</span>
-                                <span class="highlight-label">开发管线总额</span>
+                                <div class="text-xl font-serif text-gold">AED 150亿+</div>
+                                <div class="text-sm text-stone">开发管线总额</div>
                             </div>
                         </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-handshake"></i>
+                        
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-handshake text-2xl text-gold mt-1"></i>
                             <div>
-                                <span class="highlight-value">Dubai Holding</span>
-                                <span class="highlight-label">战略合作伙伴</span>
+                                <div class="text-xl font-serif text-gold">Dubai Holding</div>
+                                <div class="text-sm text-stone">战略合作伙伴</div>
                             </div>
                         </div>
-                        <div class="highlight-item">
-                            <i class="fas fa-city"></i>
+                        
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-city text-2xl text-gold mt-1"></i>
                             <div>
-                                <span class="highlight-value">2040愿景</span>
-                                <span class="highlight-label">符合迪拜城市规划</span>
+                                <div class="text-xl font-serif text-gold">2040愿景</div>
+                                <div class="text-sm text-stone">符合迪拜城市规划</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="developer-quote" data-aos="fade-left">
-                    <blockquote>
+                
+                <!-- Right: Quote -->
+                <div class="bg-white/10 backdrop-blur-sm border border-gold/30 p-10">
+                    <blockquote class="text-white text-xl md:text-2xl font-serif italic leading-relaxed mb-6">
                         "我们致力于将AI、可持续发展与人文关怀相融合，
                         打造符合迪拜智慧城市愿景的未来社区。"
                     </blockquote>
-                    <cite>— Rui Liu, 创始人兼主席</cite>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- AI Pillars Section -->
-    <section class="section ai-pillars" id="ai-pillars">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">AI TECHNOLOGY</span>
-                <h2 class="section-title">十大AI智慧支柱</h2>
-                <p class="section-desc">LEOS Core中央系统赋能，打造真正的"ChatGPT式"智慧社区</p>
-            </div>
-
-            <div class="pillars-grid">
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="50">
-                    <div class="pillar-icon"><i class="fas fa-heartbeat"></i></div>
-                    <h4>AI健康管理</h4>
-                    <p>智能健康监测与预警系统</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="100">
-                    <div class="pillar-icon"><i class="fas fa-apple-whole"></i></div>
-                    <h4>自适应营养</h4>
-                    <p>个性化营养规划方案</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="150">
-                    <div class="pillar-icon"><i class="fas fa-vr-cardboard"></i></div>
-                    <h4>沉浸式娱乐</h4>
-                    <p>智能娱乐与互动体验</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="200">
-                    <div class="pillar-icon"><i class="fas fa-house-chimney"></i></div>
-                    <h4>自学习家居</h4>
-                    <p>自适应温控与环境系统</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="250">
-                    <div class="pillar-icon"><i class="fas fa-car"></i></div>
-                    <h4>智慧出行</h4>
-                    <p>自动驾驶社区穿梭车</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="300">
-                    <div class="pillar-icon"><i class="fas fa-seedling"></i></div>
-                    <h4>再生景观</h4>
-                    <p>自浇灌树木与智能园艺</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="350">
-                    <div class="pillar-icon"><i class="fas fa-bolt"></i></div>
-                    <h4>智能能源</h4>
-                    <p>能源优化与节能管理</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="400">
-                    <div class="pillar-icon"><i class="fas fa-droplet"></i></div>
-                    <h4>水资源循环</h4>
-                    <p>智能水循环系统</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="450">
-                    <div class="pillar-icon"><i class="fas fa-wrench"></i></div>
-                    <h4>预测性维护</h4>
-                    <p>设施故障预警与维护</p>
-                </div>
-                <div class="pillar-card" data-aos="zoom-in" data-aos-delay="500">
-                    <div class="pillar-icon"><i class="fas fa-leaf"></i></div>
-                    <h4>可持续激励</h4>
-                    <p>绿色行为奖励机制</p>
-                </div>
-            </div>
-
-            <div class="ai-features" data-aos="fade-up">
-                <div class="feature-showcase">
-                    <img src="assets/IMG_1988.JPG" alt="AI Aurora Garden Walk" class="feature-image">
-                    <div class="feature-content">
-                        <h3>AI极光花园步道</h3>
-                        <p>通过生态智能与气候响应设计增强自然体验，实时互动的智慧景观系统</p>
-                    </div>
+                    <cite class="text-gold not-italic">— Rui Liu, 创始人兼主席</cite>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Inventory Section -->
-    <section class="section inventory" id="inventory">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">INVENTORY</span>
-                <h2 class="section-title">本次操盘房源</h2>
-                <p class="section-desc">Regent's Park 一期 26套精选别墅，总货值约1.16亿迪拉姆</p>
+    <section id="inventory" class="py-20 lg:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <p class="text-xs uppercase tracking-widest text-dark-stone mb-3">INVENTORY</p>
+                <h2 class="font-serif text-4xl md:text-5xl text-gray-900 mb-4">本期精选房源</h2>
+                <p class="text-gray-700 max-w-2xl mx-auto">Regent's Park 一期 26套精选别墅，总货值约1.16亿迪拉姆</p>
             </div>
 
-            <div class="inventory-summary" data-aos="fade-up">
-                <div class="summary-card gold">
-                    <span class="summary-value">26</span>
-                    <span class="summary-label">套</span>
-                    <span class="summary-desc">总套数</span>
+            <!-- Summary Stats -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                <div class="text-center p-8 bg-stone border border-gold">
+                    <div class="text-5xl font-serif text-gold mb-2">26</div>
+                    <div class="text-sm text-gray-700">总套数</div>
                 </div>
-                <div class="summary-card">
-                    <span class="summary-value">AED 1.16亿</span>
-                    <span class="summary-label"></span>
-                    <span class="summary-desc">总货值</span>
+                <div class="text-center p-8 border border-gold/20">
+                    <div class="text-3xl font-serif text-gray-900 mb-2">AED 1.16亿</div>
+                    <div class="text-sm text-gray-700">总货值</div>
                 </div>
-                <div class="summary-card">
-                    <span class="summary-value">361万</span>
-                    <span class="summary-label">起</span>
-                    <span class="summary-desc">最低价</span>
+                <div class="text-center p-8 border border-gold/20">
+                    <div class="text-3xl font-serif text-gray-900 mb-2">361万</div>
+                    <div class="text-sm text-gray-700">起始价格</div>
                 </div>
-                <div class="summary-card">
-                    <span class="summary-value">693万</span>
-                    <span class="summary-label">AED</span>
-                    <span class="summary-desc">最高价</span>
+                <div class="text-center p-8 border border-gold/20">
+                    <div class="text-3xl font-serif text-gray-900 mb-2">693万</div>
+                    <div class="text-sm text-gray-700">最高价格 (AED)</div>
                 </div>
             </div>
 
-            <div class="inventory-types" data-aos="fade-up">
-                <div class="type-card">
-                    <div class="type-header">
-                        <span class="type-beds">3BR</span>
-                        <span class="type-name">联排别墅</span>
+            <!-- Inventory Table/List -->
+            <div class="space-y-6">
+                <!-- 3BR Townhouse -->
+                <div class="grid md:grid-cols-3 gap-6 border border-gold/20 p-6 hover:border-gold/40 transition">
+                    <div class="md:col-span-1">
+                        <img src="images/TH-TYPE-D-Back-2.jpg" alt="3BR Townhouse" class="w-full h-48 object-cover">
                     </div>
-                    <div class="type-details">
-                        <div class="detail-row">
-                            <span class="detail-label">套数</span>
-                            <span class="detail-value">15套</span>
+                    <div class="md:col-span-2">
+                        <div class="flex items-baseline gap-3 mb-3">
+                            <span class="text-3xl font-serif text-gold">3BR</span>
+                            <span class="text-xl text-gray-900">联排别墅</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">建筑面积</span>
-                            <span class="detail-value">2,407-2,459 sqft</span>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div class="border-b border-gold/20 pb-2">
+                                <span class="text-gray-600">套数:</span>
+                                <span class="text-gray-900 font-medium ml-2">15套</span>
+                            </div>
+                            <div class="border-b border-gold/20 pb-2">
+                                <span class="text-gray-600">建筑面积:</span>
+                                <span class="text-gray-900 font-medium ml-2">2,407-2,459 sqft</span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-600">价格范围:</span>
+                                <span class="text-gold font-medium text-lg ml-2">AED 361万 - 393万</span>
+                            </div>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">价格范围</span>
-                            <span class="detail-value highlight">AED 361万 - 393万</span>
-                        </div>
-                    </div>
-                    <div class="type-image">
-                        <img src="assets/IMG_1980.JPG" alt="3BR Townhouse">
                     </div>
                 </div>
-
-                <div class="type-card">
-                    <div class="type-header">
-                        <span class="type-beds">4BR</span>
-                        <span class="type-name">联排别墅</span>
+                
+                <!-- 4BR Townhouse -->
+                <div class="grid md:grid-cols-3 gap-6 border border-gold/20 p-6 hover:border-gold/40 transition">
+                    <div class="md:col-span-1">
+                        <img src="images/Villa-B-Front-1.jpg" alt="4BR Townhouse" class="w-full h-48 object-cover">
                     </div>
-                    <div class="type-details">
-                        <div class="detail-row">
-                            <span class="detail-label">套数</span>
-                            <span class="detail-value">8套</span>
+                    <div class="md:col-span-2">
+                        <div class="flex items-baseline gap-3 mb-3">
+                            <span class="text-3xl font-serif text-gold">4BR</span>
+                            <span class="text-xl text-gray-900">联排别墅</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">建筑面积</span>
-                            <span class="detail-value">3,199-3,233 sqft</span>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div class="border-b border-gold/20 pb-2">
+                                <span class="text-gray-600">套数:</span>
+                                <span class="text-gray-900 font-medium ml-2">8套</span>
+                            </div>
+                            <div class="border-b border-gold/20 pb-2">
+                                <span class="text-gray-600">建筑面积:</span>
+                                <span class="text-gray-900 font-medium ml-2">3,199-3,233 sqft</span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-600">价格范围:</span>
+                                <span class="text-gold font-medium text-lg ml-2">AED 496万 - 517万</span>
+                            </div>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">价格范围</span>
-                            <span class="detail-value highlight">AED 496万 - 517万</span>
-                        </div>
-                    </div>
-                    <div class="type-image">
-                        <img src="assets/IMG_1981.JPG" alt="4BR Townhouse">
                     </div>
                 </div>
-
-                <div class="type-card">
-                    <div class="type-header">
-                        <span class="type-beds">5BR</span>
-                        <span class="type-name">独立别墅</span>
+                
+                <!-- 5BR Villa -->
+                <div class="grid md:grid-cols-3 gap-6 border border-gold/20 p-6 hover:border-gold/40 transition">
+                    <div class="md:col-span-1">
+                        <img src="images/villa-D-front-view-1.jpg" alt="5BR Villa" class="w-full h-48 object-cover">
                     </div>
-                    <div class="type-details">
-                        <div class="detail-row">
-                            <span class="detail-label">套数</span>
-                            <span class="detail-value">3套</span>
+                    <div class="md:col-span-2">
+                        <div class="flex items-baseline gap-3 mb-3">
+                            <span class="text-3xl font-serif text-gold">5BR</span>
+                            <span class="text-xl text-gray-900">独立别墅</span>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">建筑面积</span>
-                            <span class="detail-value">4,200 sqft</span>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div class="border-b border-gold/20 pb-2">
+                                <span class="text-gray-600">套数:</span>
+                                <span class="text-gray-900 font-medium ml-2">3套</span>
+                            </div>
+                            <div class="border-b border-gold/20 pb-2">
+                                <span class="text-gray-600">建筑面积:</span>
+                                <span class="text-gray-900 font-medium ml-2">4,200 sqft</span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="text-gray-600">价格范围:</span>
+                                <span class="text-gold font-medium text-lg ml-2">AED 676万 - 693万</span>
+                            </div>
                         </div>
-                        <div class="detail-row">
-                            <span class="detail-label">价格范围</span>
-                            <span class="detail-value highlight">AED 676万 - 693万</span>
-                        </div>
-                    </div>
-                    <div class="type-image">
-                        <img src="assets/IMG_1985.JPG" alt="5BR Villa">
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
     <!-- Investment Strategy Section -->
-    <section class="section investment" id="investment">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">INVESTMENT MODEL</span>
-                <h2 class="section-title">LEOS Royal 投资操盘方案</h2>
-                <p class="section-desc">低风险、短周期、高回报的迪拜地产套利机会</p>
+    <section id="investment" class="py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <p class="text-xs uppercase tracking-widest text-dark-stone mb-3">INVESTMENT MODEL</p>
+                <h2 class="font-serif text-4xl md:text-5xl text-gray-900 mb-4">LEOS Royal 投资策略</h2>
+                <p class="text-gray-700 max-w-2xl mx-auto">低风险、短周期、高回报的迪拜地产套利机会</p>
             </div>
 
-            <!-- 本次操盘方案概览 -->
-            <div class="invest-overview" data-aos="fade-up">
-                <div class="invest-overview-header">
-                    <h3><i class="fas fa-file-invoice-dollar"></i> 本次操盘项目方案</h3>
+            <!-- Project Overview -->
+            <div class="bg-white border border-gold/20 p-8 lg:p-12 mb-12">
+                <div class="flex items-center gap-3 mb-8">
+                    <i class="fas fa-file-invoice-dollar text-2xl text-gold"></i>
+                    <h3 class="font-serif text-2xl text-gray-900">本期投资项目概览</h3>
                 </div>
-                <div class="invest-overview-grid">
-                    <div class="overview-stat">
-                        <span class="overview-label">锁定房源</span>
-                        <span class="overview-value">26套</span>
-                        <span class="overview-note">Regent's Park 一期全部库存</span>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="text-center p-6 bg-stone">
+                        <div class="text-sm text-gray-600 mb-2">锁定房源</div>
+                        <div class="text-3xl font-serif text-gray-900 mb-1">26套</div>
+                        <div class="text-xs text-gray-600">Regent's Park 一期全部库存</div>
                     </div>
-                    <div class="overview-stat">
-                        <span class="overview-label">房源总货值</span>
-                        <span class="overview-value gold">AED 1.16亿</span>
-                        <span class="overview-note">约 115,799,975 迪拉姆</span>
+                    <div class="text-center p-6 bg-stone">
+                        <div class="text-sm text-gray-600 mb-2">房源总货值</div>
+                        <div class="text-2xl font-serif text-gold mb-1">AED 1.16亿</div>
+                        <div class="text-xs text-gray-600">约 115,799,975 迪拉姆</div>
                     </div>
-                    <div class="overview-stat">
-                        <span class="overview-label">定金比例</span>
-                        <span class="overview-value">10%</span>
-                        <span class="overview-note">约 AED 1,160万</span>
+                    <div class="text-center p-6 bg-stone">
+                        <div class="text-sm text-gray-600 mb-2">定金比例</div>
+                        <div class="text-3xl font-serif text-gray-900 mb-1">10%</div>
+                        <div class="text-xs text-gray-600">约 AED 1,160万</div>
                     </div>
-                    <div class="overview-stat">
-                        <span class="overview-label">操盘周期</span>
-                        <span class="overview-value">3-6个月</span>
-                        <span class="overview-note">内完成退出与利润兑现</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 投资模式与资金计划 -->
-            <div class="invest-model" data-aos="fade-up">
-                <div class="invest-model-header">
-                    <h3><i class="fas fa-project-diagram"></i> 投资模式与资金计划</h3>
-                </div>
-                <div class="invest-model-content">
-                    <div class="model-left">
-                        <div class="model-item">
-                            <div class="model-icon"><i class="fas fa-home"></i></div>
-                            <div class="model-text">
-                                <h4>拿货规模</h4>
-                                <p><strong class="gold">26套</strong>（Regent's Park 一期全部可售库存）</p>
-                            </div>
-                        </div>
-                        <div class="model-item">
-                            <div class="model-icon"><i class="fas fa-coins"></i></div>
-                            <div class="model-text">
-                                <h4>投入资金</h4>
-                                <p><strong class="gold">AED 1,160万</strong>（仅10%定金）</p>
-                            </div>
-                        </div>
-                        <div class="model-item">
-                            <div class="model-icon"><i class="fas fa-clock"></i></div>
-                            <div class="model-text">
-                                <h4>资金占用期</h4>
-                                <p>约 <strong class="gold">3个月</strong>（回款周期）</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="model-right">
-                        <div class="model-highlight">
-                            <span class="highlight-title">目标优惠方案</span>
-                            <div class="highlight-row">
-                                <span>开发商折扣</span>
-                                <span class="gold">10%</span>
-                            </div>
-                            <div class="highlight-row">
-                                <span>销售佣金返还</span>
-                                <span class="gold">5%</span>
-                            </div>
-                            <div class="highlight-row total">
-                                <span>总优惠空间</span>
-                                <span class="gold">15%</span>
-                            </div>
-                        </div>
+                    <div class="text-center p-6 bg-stone">
+                        <div class="text-sm text-gray-600 mb-2">退出周期</div>
+                        <div class="text-2xl font-serif text-gray-900 mb-1">3-6个月</div>
+                        <div class="text-xs text-gray-600">内完成退出与利润兑现</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 执行机制 -->
-            <div class="invest-mechanism" data-aos="fade-up">
-                <div class="mechanism-header">
-                    <h3><i class="fas fa-cogs"></i> 与开发商谈判策略 · 执行机制</h3>
+            <!-- Investment Model - Split Layout -->
+            <div class="bg-white border border-gold/20 p-8 lg:p-12 mb-12">
+                <div class="flex items-center gap-3 mb-8">
+                    <i class="fas fa-project-diagram text-2xl text-gold"></i>
+                    <h3 class="font-serif text-2xl text-gray-900">投资模式与资金计划</h3>
                 </div>
-                <div class="mechanism-steps">
-                    <div class="mech-step">
-                        <div class="mech-number">1</div>
-                        <div class="mech-content">
-                            <h4>批量预定</h4>
-                            <p>以公司名义预定 <strong>26套</strong> 房源，支付 <strong class="gold">10%定金</strong></p>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <i class="fas fa-home text-2xl text-gold mt-1"></i>
+                            <div>
+                                <h4 class="font-serif text-lg text-gray-900 mb-1">拿货规模</h4>
+                                <p class="text-sm text-gray-700"><span class="text-gold font-medium">26套</span>（Regent's Park 一期全部可售库存）</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mech-arrow"><i class="fas fa-chevron-right"></i></div>
-                    <div class="mech-step">
-                        <div class="mech-number">2</div>
-                        <div class="mech-content">
-                            <h4>渠道分销</h4>
-                            <p>项目开盘后，房源交由 <strong>开发商销售系统</strong> 及自身渠道体系</p>
+                        <div class="flex gap-4">
+                            <i class="fas fa-coins text-2xl text-gold mt-1"></i>
+                            <div>
+                                <h4 class="font-serif text-lg text-gray-900 mb-1">投入资金</h4>
+                                <p class="text-sm text-gray-700"><span class="text-gold font-medium">AED 1,160万</span>（仅10%定金）</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mech-arrow"><i class="fas fa-chevron-right"></i></div>
-                    <div class="mech-step">
-                        <div class="mech-number">3</div>
-                        <div class="mech-content">
-                            <h4>代理分配</h4>
-                            <p>利用开发商渠道将房源分配至 <strong>全迪拜代理网络</strong></p>
-                        </div>
-                    </div>
-                    <div class="mech-arrow"><i class="fas fa-chevron-right"></i></div>
-                    <div class="mech-step">
-                        <div class="mech-number">4</div>
-                        <div class="mech-content">
-                            <h4>原价成交</h4>
-                            <p>新客户通过代理以 <strong>原价购买</strong> 房源</p>
-                        </div>
-                    </div>
-                    <div class="mech-arrow"><i class="fas fa-chevron-right"></i></div>
-                    <div class="mech-step highlight">
-                        <div class="mech-number">5</div>
-                        <div class="mech-content">
-                            <h4>差价返还</h4>
-                            <p>差价部分 <strong class="gold">10%</strong> 由开发商 <strong>分阶段返还</strong></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 资金回流与返款节点 -->
-            <div class="invest-cashflow" data-aos="fade-up">
-                <div class="cashflow-header">
-                    <h3><i class="fas fa-money-bill-transfer"></i> 资金回流与返款节点</h3>
-                </div>
-                <div class="cashflow-timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-badge">节点 1</div>
-                            <h4>本金回收</h4>
-                            <p>新客户支付 <strong>20%首付款</strong> 时，开发商返还我方 <strong class="gold">10%定金</strong></p>
-                            <span class="timeline-result">→ 本金全额回收</span>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-badge">节点 2</div>
-                            <h4>差价收益分阶段返还</h4>
-                            <div class="timeline-breakdown">
-                                <div class="breakdown-row">
-                                    <span>首期（立即）</span>
-                                    <span class="gold">50%</span>
-                                </div>
-                                <div class="breakdown-row">
-                                    <span>次期（3个月后）</span>
-                                    <span class="gold">25%</span>
-                                </div>
-                                <div class="breakdown-row">
-                                    <span>尾期（6个月后）</span>
-                                    <span class="gold">25%</span>
-                                </div>
+                        <div class="flex gap-4">
+                            <i class="fas fa-clock text-2xl text-gold mt-1"></i>
+                            <div>
+                                <h4 class="font-serif text-lg text-gray-900 mb-1">资金占用期</h4>
+                                <p class="text-sm text-gray-700">约 <span class="text-gold font-medium">3-6个月</span>（回款周期）</p>
                             </div>
                         </div>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-badge">节点 3</div>
-                            <h4>佣金支付</h4>
-                            <p>客户签署买卖合同后，开发商支付 <strong class="gold">5%佣金</strong>（用于支付代理）</p>
+                    <div class="bg-stone p-8">
+                        <div class="text-center mb-4">
+                            <div class="font-serif text-lg text-gray-900">目标优惠方案</div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 投资分润举例 -->
-            <div class="invest-example" data-aos="fade-up">
-                <div class="example-header">
-                    <h3><i class="fas fa-chart-pie"></i> 投资分润举例</h3>
-                    <span class="example-subtitle">以 LEOS Royal Regent's Park 一期为例</span>
-                </div>
-                <div class="example-content">
-                    <div class="example-left">
-                        <div class="example-input">
-                            <div class="input-item">
-                                <span class="input-label">项目总货值</span>
-                                <span class="input-value">AED 1.16亿</span>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center pb-3 border-b border-gold/20">
+                                <span class="text-gray-700">开发商折扣</span>
+                                <span class="text-2xl font-serif text-gold">10%</span>
                             </div>
-                            <div class="input-item">
-                                <span class="input-label">投资金额</span>
-                                <span class="input-value">AED 1,160万</span>
+                            <div class="flex justify-between items-center pb-3 border-b border-gold/20">
+                                <span class="text-gray-700">销售佣金返还</span>
+                                <span class="text-2xl font-serif text-gold">5%</span>
                             </div>
-                            <div class="input-item highlight">
-                                <span class="input-label">总利润（10%差价）</span>
-                                <span class="input-value gold">AED 1,160万</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="example-right">
-                        <div class="example-breakdown">
-                            <h4>利润分配</h4>
-                            <div class="breakdown-item">
-                                <div class="breakdown-bar" style="--width: 10%"></div>
-                                <span class="breakdown-label">经纪公司 (1%)</span>
-                                <span class="breakdown-value">AED 116万</span>
-                            </div>
-                            <div class="breakdown-item">
-                                <div class="breakdown-bar" style="--width: 15%"></div>
-                                <span class="breakdown-label">管理公司 (1.5%)</span>
-                                <span class="breakdown-value">AED 174万</span>
-                            </div>
-                            <div class="breakdown-item featured">
-                                <div class="breakdown-bar gold" style="--width: 75%"></div>
-                                <span class="breakdown-label">投资人分润 (7.5%)</span>
-                                <span class="breakdown-value gold">AED 870万</span>
-                            </div>
-                        </div>
-                        <div class="example-result">
-                            <div class="result-item">
-                                <span class="result-label">投资周期</span>
-                                <span class="result-value">约 3个月</span>
-                            </div>
-                            <div class="result-item highlight">
-                                <span class="result-label">单轮回报率</span>
-                                <span class="result-value gold">75%</span>
+                            <div class="flex justify-between items-center pt-3">
+                                <span class="font-medium text-gray-900">总优惠空间</span>
+                                <span class="text-3xl font-serif text-gold">15%</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 退出机制 -->
-            <div class="invest-exit" data-aos="fade-up">
-                <div class="exit-header">
-                    <h3><i class="fas fa-door-open"></i> 退出机制与资金回流</h3>
+            <!-- Execution Mechanism -->
+            <div class="bg-white border border-gold/20 p-8 lg:p-12">
+                <div class="flex items-center gap-3 mb-8">
+                    <i class="fas fa-cogs text-2xl text-gold"></i>
+                    <h3 class="font-serif text-2xl text-gray-900">与开发商谈判策略 · 执行机制</h3>
                 </div>
-                <div class="exit-steps">
-                    <div class="exit-step">
-                        <div class="exit-icon"><i class="fas fa-hand-holding-dollar"></i></div>
-                        <div class="exit-num">1</div>
-                        <p>新客户支付 <strong>20%首付</strong> 时，开发商返还 <strong class="gold">10%定金</strong>，<strong>本金回收</strong></p>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-gold text-white flex items-center justify-center text-xl font-serif mx-auto mb-4">1</div>
+                        <h4 class="font-serif text-base text-gray-900 mb-2">批量预定</h4>
+                        <p class="text-xs text-gray-700">以公司名义预定 <strong>26套</strong> 房源，支付 <strong className="text-gold">10%定金</strong></p>
                     </div>
-                    <div class="exit-step">
-                        <div class="exit-icon"><i class="fas fa-sack-dollar"></i></div>
-                        <div class="exit-num">2</div>
-                        <p>差价收益由开发商按付款进度 <strong>分三次返还</strong></p>
+                    <div class="hidden md:flex items-center justify-center">
+                        <i class="fas fa-chevron-right text-gold text-2xl"></i>
                     </div>
-                    <div class="exit-step">
-                        <div class="exit-icon"><i class="fas fa-calendar-check"></i></div>
-                        <div class="exit-num">3</div>
-                        <p>全部资金回笼周期约 <strong class="gold">3-6个月</strong></p>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-gold text-white flex items-center justify-center text-xl font-serif mx-auto mb-4">2</div>
+                        <h4 class="font-serif text-base text-gray-900 mb-2">渠道分销</h4>
+                        <p class="text-xs text-gray-700">项目开盘后，房源交由 <strong>开发商销售系统</strong> 及自身渠道体系</p>
                     </div>
-                    <div class="exit-step">
-                        <div class="exit-icon"><i class="fas fa-rotate"></i></div>
-                        <div class="exit-num">4</div>
-                        <p>操盘完成后立即进入下一期项目，实现 <strong class="gold">季度滚动</strong></p>
+                    <div class="hidden md:flex items-center justify-center">
+                        <i class="fas fa-chevron-right text-gold text-2xl"></i>
                     </div>
-                    <div class="exit-step">
-                        <div class="exit-icon"><i class="fas fa-shield-halved"></i></div>
-                        <div class="exit-num">5</div>
-                        <p>资金由 <strong>开发商托管账户</strong> 全程管理，<strong class="gold">风险低</strong></p>
+                    <div class="text-center">
+                        <div class="w-12 h-12 rounded-full bg-gold text-white flex items-center justify-center text-xl font-serif mx-auto mb-4">3</div>
+                        <h4 class="font-serif text-base text-gray-900 mb-2">代理分配</h4>
+                        <p class="text-xs text-gray-700">利用开发商渠道将房源分配至 <strong>全迪拜代理网络</strong></p>
                     </div>
                 </div>
-            </div>
-
-            <!-- 核心投资优势 -->
-            <div class="investment-highlights" data-aos="fade-up">
-                <h3><i class="fas fa-star"></i> 核心投资优势</h3>
-                <div class="highlights-grid">
-                    <div class="hl-item">
-                        <i class="fas fa-building"></i>
-                        <span><strong>品牌背书：</strong>英国LEOS Developments，AED 150亿开发管线，与Dubai Holding战略合作</span>
+                <div class="mt-8 text-center">
+                    <div class="inline-flex items-center gap-2 text-gold">
+                        <i class="fas fa-arrow-down text-2xl"></i>
                     </div>
-                    <div class="hl-item">
-                        <i class="fas fa-location-dot"></i>
-                        <span><strong>核心地段：</strong>距迪拜市中心仅16分钟，直连E66主干道，Dubailand核心发展区</span>
-                    </div>
-                    <div class="hl-item">
-                        <i class="fas fa-gem"></i>
-                        <span><strong>产品稀缺：</strong>全球首个AI智慧社区，800套纯英式别墅，40%绿化率，市场独一无二</span>
-                    </div>
-                    <div class="hl-item">
-                        <i class="fas fa-bolt"></i>
-                        <span><strong>操盘高效：</strong>周期短、流动性强，仅10%风险敞口，收益路径清晰透明</span>
-                    </div>
+                </div>
+                <div class="mt-6 text-center p-6 bg-stone">
+                    <h4 class="font-serif text-xl text-gray-900 mb-2">快速退出与利润兑现</h4>
+                    <p class="text-sm text-gray-700">预计 <span class="text-gold font-medium">3-6个月内</span> 完成全部房源销售与退出</p>
                 </div>
             </div>
-
-            <!-- 总结 -->
-            <div class="invest-summary" data-aos="fade-up">
-                <div class="summary-content">
-                    <h3>投资总结</h3>
-                    <p>
-                        LEOS Royal 项目是一次 <strong class="gold">低风险、短周期、高回报</strong> 的地产操盘机会。
-                        本项目一期开盘300余套房源即刻售罄，仅剩本次锁定的26套房源。
-                        通过以 <strong>10%定金（约AED 1,160万）</strong> 撬动 <strong>1.16亿货值</strong> 房源，
-                        再利用开发商渠道及代理商分销网络快速出货，预计 <strong class="gold">3-6个月内</strong> 即可实现本金回收与 <strong class="gold">75%</strong> 的利润回报。
-                    </p>
-                    <div class="summary-tagline">
-                        这是迪拜市场中兼具 <span class="gold">安全性</span>、<span class="gold">灵活性</span> 与 <span class="gold">高效率</span> 的短线套利机会。
-                    </div>
-                </div>
-            </div>
-
         </div>
     </section>
 
-    <!-- Gallery Section -->
-    <section class="section gallery" id="gallery">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">GALLERY</span>
-                <h2 class="section-title">项目画廊</h2>
-                <p class="section-desc">探索LEOS Royal的奢华生活空间</p>
+    <!-- AI Pillars Section -->
+    <section id="ai-pillars" class="py-20 lg:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <p class="text-xs uppercase tracking-widest text-dark-stone mb-3">AI TECHNOLOGY</p>
+                <h2 class="font-serif text-4xl md:text-5xl text-gray-900 mb-4">十大AI智慧支柱</h2>
+                <p class="text-gray-700 max-w-2xl mx-auto">LEOS Core中央系统赋能，打造真正的"ChatGPT式"智慧社区</p>
             </div>
 
-            <div class="gallery-grid" data-aos="fade-up">
-                <div class="gallery-item large">
-                    <img src="assets/IMG_1977.JPG" alt="LEOS Royal Entrance">
-                    <div class="gallery-overlay">
-                        <span>社区入口</span>
-                    </div>
+            <!-- Pillars Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-20">
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-heartbeat text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">AI健康管理</h4>
+                    <p class="text-xs text-gray-600">智能健康监测与预警系统</p>
                 </div>
-                <div class="gallery-item">
-                    <img src="assets/IMG_1978.JPG" alt="Villa Design">
-                    <div class="gallery-overlay">
-                        <span>别墅设计</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-apple-whole text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">自适应营养</h4>
+                    <p class="text-xs text-gray-600">个性化营养规划方案</p>
                 </div>
-                <div class="gallery-item">
-                    <img src="assets/IMG_1979.JPG" alt="Interior">
-                    <div class="gallery-overlay">
-                        <span>室内空间</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-vr-cardboard text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">沉浸式娱乐</h4>
+                    <p class="text-xs text-gray-600">智能娱乐与互动体验</p>
                 </div>
-                <div class="gallery-item">
-                    <img src="assets/IMG_1980.JPG" alt="Townhouse">
-                    <div class="gallery-overlay">
-                        <span>联排别墅</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-house-chimney text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">自学习家居</h4>
+                    <p class="text-xs text-gray-600">自适应温控与环境系统</p>
                 </div>
-                <div class="gallery-item tall">
-                    <img src="assets/IMG_1985.JPG" alt="Garden Villa">
-                    <div class="gallery-overlay">
-                        <span>花园别墅</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-car text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">智慧出行</h4>
+                    <p class="text-xs text-gray-600">自动驾驶社区穿梭车</p>
                 </div>
-                <div class="gallery-item">
-                    <img src="assets/IMG_1988.JPG" alt="AI Garden">
-                    <div class="gallery-overlay">
-                        <span>AI花园步道</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-seedling text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">再生景观</h4>
+                    <p class="text-xs text-gray-600">自浇灌树木与智能园艺</p>
                 </div>
-                <div class="gallery-item">
-                    <img src="assets/IMG_1990.JPG" alt="Signature Villa">
-                    <div class="gallery-overlay">
-                        <span>水岸别墅</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-bolt text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">智能能源</h4>
+                    <p class="text-xs text-gray-600">能源优化与节能管理</p>
                 </div>
-                <div class="gallery-item wide">
-                    <img src="assets/IMG_1996.JPG" alt="Community Plan">
-                    <div class="gallery-overlay">
-                        <span>社区规划</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-droplet text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">水资源循环</h4>
+                    <p class="text-xs text-gray-600">智能水循环系统</p>
                 </div>
-                <div class="gallery-item">
-                    <img src="assets/IMG_1992.JPG" alt="Interior Design">
-                    <div class="gallery-overlay">
-                        <span>奢华内饰</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-wrench text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">预测性维护</h4>
+                    <p class="text-xs text-gray-600">设施故障预警与维护</p>
                 </div>
-                <div class="gallery-item">
-                    <img src="assets/IMG_1994.JPG" alt="Amenities">
-                    <div class="gallery-overlay">
-                        <span>配套设施</span>
-                    </div>
+
+                <div class="text-center p-6 border border-gold/20 hover:border-gold/40 transition">
+                    <i class="fas fa-leaf text-3xl text-gold mb-3"></i>
+                    <h4 class="font-serif text-base text-gray-900 mb-1">可持续激励</h4>
+                    <p class="text-xs text-gray-600">绿色行为奖励机制</p>
+                </div>
+            </div>
+
+            <!-- Feature Showcase - Split Layout -->
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <img src="images/LR_COMMUNITY_Street-view-1.jpg" alt="AI Aurora Garden Walk" class="w-full h-auto">
+                </div>
+                <div>
+                    <h3 class="font-serif text-3xl text-gray-900 mb-4">AI极光花园步道</h3>
+                    <p class="text-gray-700 leading-relaxed">通过生态智能与气候响应设计增强自然体验，实时互动的智慧景观系统</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Amenities Section -->
-    <section class="section amenities" id="amenities">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up">
-                <span class="section-tag">AMENITIES</span>
-                <h2 class="section-title">顶级配套</h2>
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 lg:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <p class="text-xs uppercase tracking-widest text-dark-stone mb-3">GALLERY</p>
+                <h2 class="font-serif text-4xl md:text-5xl text-gray-900 mb-4">项目画廊</h2>
+                <p class="text-gray-700">探索LEOS Royal的奢华生活空间</p>
             </div>
 
-            <div class="amenities-grid" data-aos="fade-up">
-                <div class="amenity-item">
-                    <i class="fas fa-water"></i>
-                    <span>泻湖水景</span>
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="gallery-item col-span-2 row-span-2">
+                    <img src="images/LR_Master-Plan01.jpg" alt="LEOS Royal Entrance" class="w-full h-full object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-person-swimming"></i>
-                    <span>无边泳池</span>
+                <div class="gallery-item">
+                    <img src="images/villa-C-back-view-1.jpg" alt="Villa Design" class="w-full h-48 object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-dumbbell"></i>
-                    <span>健身中心</span>
+                <div class="gallery-item">
+                    <img src="images/GWR_-Living-room_-High-res_-01.jpg" alt="Interior" class="w-full h-48 object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-spa"></i>
-                    <span>SPA水疗</span>
+                <div class="gallery-item">
+                    <img src="images/LR_Community-Centre-3-2.jpg" alt="Townhouse" class="w-full h-48 object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-table-tennis-paddle-ball"></i>
-                    <span>Padel球场</span>
+                <div class="gallery-item row-span-2">
+                    <img src="images/LR_SIGNATURE-CANAL-VILLA-DUSK-2.jpg" alt="Garden Villa" class="w-full h-full object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-school"></i>
-                    <span>英国学校</span>
+                <div class="gallery-item">
+                    <img src="images/LR_SALE-CENTRE-CLUBHOUSE-FRONT-1.jpg" alt="AI Garden" class="w-full h-48 object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-bicycle"></i>
-                    <span>骑行道</span>
+                <div class="gallery-item">
+                    <img src="images/LR_SIGNATURE-CANAL-VILLA-Night-1.jpg" alt="Signature Villa" class="w-full h-48 object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-child"></i>
-                    <span>儿童乐园</span>
+                <div class="gallery-item col-span-2">
+                    <img src="images/LR_Canal-birdsview-night-1.jpg" alt="Community Plan" class="w-full h-48 object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-champagne-glasses"></i>
-                    <span>高端会所</span>
+                <div class="gallery-item">
+                    <img src="images/GWR_-Master-Bedroom_-High-res.jpg" alt="Interior Design" class="w-full h-48 object-cover">
                 </div>
-                <div class="amenity-item">
-                    <i class="fas fa-om"></i>
-                    <span>瑜伽空间</span>
+                <div class="gallery-item">
+                    <img src="images/GWR_-Master-Bathroom_-High-res.jpg" alt="Amenities" class="w-full h-48 object-cover">
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section class="section contact" id="contact">
-        <div class="contact-bg">
-            <img src="assets/IMG_1990.JPG" alt="Contact Background">
-            <div class="contact-overlay"></div>
+    <section id="contact" class="relative py-20 lg:py-32">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="images/LR_Master-District-1.jpg" alt="Contact Background" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-black/40"></div>
         </div>
-        <div class="container">
-            <div class="contact-content" data-aos="fade-up">
-                <span class="section-tag light">GET IN TOUCH</span>
-                <h2 class="section-title light">立即咨询投资机会</h2>
-                <p class="contact-desc">
-                    把握迪拜地产投资黄金机遇，专业团队为您提供一对一咨询服务
-                </p>
-                <div class="contact-buttons">
-                    <a href="#" class="btn btn-primary">
-                        <i class="fab fa-whatsapp"></i>
-                        WhatsApp咨询
-                    </a>
-                    <a href="#" class="btn btn-outline">
-                        <i class="fas fa-calendar"></i>
-                        预约会面
-                    </a>
+        
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-xs uppercase tracking-widest text-stone mb-3">GET IN TOUCH</p>
+            <h2 class="font-serif text-4xl md:text-5xl text-white mb-6">立即咨询投资机会</h2>
+            <p class="text-stone text-lg mb-10 max-w-2xl mx-auto">
+                把握迪拜地产投资黄金机遇，专业团队为您提供一对一咨询服务
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                <a href="#" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gold text-white font-medium hover:bg-gold/90 transition">
+                    <i class="fab fa-whatsapp text-xl"></i>
+                    WhatsApp咨询
+                </a>
+                <a href="#" class="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white text-white font-medium hover:bg-white/10 transition">
+                    <i class="fas fa-calendar"></i>
+                    预约会面
+                </a>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center text-white">
+                <div class="flex items-center justify-center gap-2">
+                    <i class="fas fa-map-marker-alt text-gold"></i>
+                    <span class="text-sm">迪拜 Downtown</span>
                 </div>
-                <div class="contact-info">
-                    <div class="info-item">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>迪拜 Downtown</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-envelope"></i>
-                        <span>invest@leosroyal.ae</span>
-                    </div>
+                <div class="flex items-center justify-center gap-2">
+                    <i class="fas fa-envelope text-gold"></i>
+                    <span class="text-sm">invest@leosroyal.ae</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <span class="logo-text">LEOS</span>
-                        <span class="logo-accent">Royal</span>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <!-- Brand -->
+                <div>
+                    <div class="font-serif text-2xl mb-3">
+                        <span>LEOS</span>
+                        <span class="text-gold"> Royal</span>
                     </div>
-                    <p>THE WORLD'S FIRST AI-POWERED COMMUNITY</p>
+                    <p class="text-sm text-gray-400">THE WORLD'S FIRST AI-POWERED COMMUNITY</p>
                 </div>
-                <div class="footer-links">
-                    <a href="#overview">项目概况</a>
-                    <a href="#developer">开发商</a>
-                    <a href="#ai-pillars">AI智慧</a>
-                    <a href="#inventory">房源</a>
-                    <a href="#investment">投资方案</a>
-                    <a href="#gallery">画廊</a>
+                
+                <!-- Links -->
+                <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                    <a href="#overview" class="text-gray-400 hover:text-gold transition">项目概况</a>
+                    <a href="#developer" class="text-gray-400 hover:text-gold transition">开发商</a>
+                    <a href="#ai-pillars" class="text-gray-400 hover:text-gold transition">AI智慧</a>
+                    <a href="#inventory" class="text-gray-400 hover:text-gold transition">房源</a>
+                    <a href="#investment" class="text-gray-400 hover:text-gold transition">投资方案</a>
+                    <a href="#gallery" class="text-gray-400 hover:text-gold transition">画廊</a>
                 </div>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
+                
+                <!-- Social -->
+                <div class="flex gap-4 justify-start md:justify-end">
+                    <a href="#" class="w-10 h-10 border border-gold/30 flex items-center justify-center hover:border-gold hover:bg-gold/10 transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 border border-gold/30 flex items-center justify-center hover:border-gold hover:bg-gold/10 transition">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 border border-gold/30 flex items-center justify-center hover:border-gold hover:bg-gold/10 transition">
+                        <i class="fab fa-youtube"></i>
+                    </a>
                 </div>
             </div>
-            <div class="footer-bottom">
+            
+            <div class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
                 <p>&copy; 2025 LEOS Royal Investment. 本资料仅供投资人参考。</p>
             </div>
         </div>
@@ -945,13 +882,91 @@
         <button id="lightbox-prev" class="lightbox-nav prev"><i class="fas fa-chevron-left"></i></button>
         <button id="lightbox-next" class="lightbox-nav next"><i class="fas fa-chevron-right"></i></button>
         <div class="lightbox-content">
-            <img src="" alt="Enlarged gallery image" class="lightbox-img">
+            <img src="/placeholder.svg" alt="Enlarged gallery image" class="lightbox-img">
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('mobile-menu-open');
+            const icon = mobileMenuToggle.querySelector('i');
+            if (mobileMenu.classList.contains('mobile-menu-open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile menu when clicking links
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('mobile-menu-open');
+                const icon = mobileMenuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // Gallery Lightbox
+        const galleryItems = document.querySelectorAll('.gallery-item');
+        const galleryImages = Array.from(galleryItems).map(item => item.querySelector('img').src);
+        let currentIndex = 0;
+
+        function showLightbox(index) {
+            currentIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = lightbox.querySelector('.lightbox-img');
+            
+            lightboxImg.src = galleryImages[currentIndex];
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function showNextImage() {
+            currentIndex = (currentIndex + 1) % galleryImages.length;
+            document.querySelector('.lightbox-img').src = galleryImages[currentIndex];
+        }
+
+        function showPrevImage() {
+            currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+            document.querySelector('.lightbox-img').src = galleryImages[currentIndex];
+        }
+
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('click', () => showLightbox(index));
+        });
+
+        document.getElementById('lightbox-close').addEventListener('click', hideLightbox);
+        document.getElementById('lightbox-next').addEventListener('click', showNextImage);
+        document.getElementById('lightbox-prev').addEventListener('click', showPrevImage);
+        
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') {
+                hideLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                if (e.key === 'Escape') hideLightbox();
+                if (e.key === 'ArrowRight') showNextImage();
+                if (e.key === 'ArrowLeft') showPrevImage();
+            }
+        });
+    </script>
 </body>
 </html>
